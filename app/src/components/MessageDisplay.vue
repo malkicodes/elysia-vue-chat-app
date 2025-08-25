@@ -2,6 +2,8 @@
 import { Event, type ChatEvent } from '@shared/index'
 import { onMounted } from 'vue'
 
+import linkifyStr from 'linkify-string'
+
 defineProps<{
     message: ChatEvent
 }>()
@@ -27,20 +29,20 @@ onMounted(() => {
 <template>
     <div class="message" v-if="message.event === Event.MESSAGE">
         <p>
-            <span>{{ message.userId }}</span
-            >: {{ message.content }}
+            <strong>{{ message.userId }}</strong
+            >: <span v-html="linkifyStr(message.content)"></span>
         </p>
     </div>
     <div class="message" v-else>
         <p>
-            <span>{{ message.userId }}</span>
+            <strong>{{ message.userId }}</strong>
             {{ message.event === Event.USER_LEAVE ? 'left the chat.' : 'joined the chat!' }}
         </p>
     </div>
 </template>
 
 <style>
-.message > p > span {
+.message > p > strong {
     @apply font-bold;
 }
 </style>
